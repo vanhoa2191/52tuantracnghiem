@@ -1,0 +1,5 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {stageForWeek,growthForProgress,growthMarkup,milestoneForWeek} from '../public/game-journey.mjs';
+test('all 52 weeks receive alternating answer stages without altering quarter milestones',()=>{const seen=new Set();for(let week=1;week<=52;week++){const stage=stageForWeek(week);seen.add(stage.id);assert.notEqual(stage.id,stageForWeek(week===52?51:week+1).id);assert.equal(!!milestoneForWeek(week),week%13===0);}assert.equal(seen.size,4);assert.equal(milestoneForWeek(52).annual,true);});
+test('sprout growth counts saved choices, including choices needing further discussion',()=>{const choices=[{selected:'D',isCorrect:false},{selected:'A',isCorrect:true},{}];const answered=choices.filter(x=>x.selected).length;assert.equal(growthForProgress(answered,10),.2);assert.ok(growthMarkup(answered,10).includes('aria-valuenow="2"'));assert.equal(growthForProgress(11,10),1);assert.equal(growthForProgress(-1,10),0);assert.equal(growthForProgress(2,0),0);assert.equal(growthForProgress(NaN),0);});

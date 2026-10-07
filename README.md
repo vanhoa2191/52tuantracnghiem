@@ -39,3 +39,9 @@ Máy chủ lưu hồ sơ, lượt làm, lựa chọn gốc, thứ tự lựa ch�
 `content-review.md` mô tả các tình huống trùng ý đã xác minh. Không có trùng nguyên văn, nhưng không thể coi 52 bộ là không lặp ý. Các tuần tổng kết được giữ nguyên. `data/editorial-notes.json` ghi rõ lựa chọn khác cũng phù hợp, lưu ý an toàn và hiệu chỉnh ở câu 50.3. Nguyên văn tài liệu luôn được giữ để đối chiếu; mỗi lượt làm lưu hash phiên bản nội dung và kết quả chấm tại thời điểm trả lời.
 
 Không có công cụ kiểm tra bằng trình duyệt trong môi trường hiện tại. Đã kiểm tra cú pháp, artifact và luồng API bằng SQLite thật, bao gồm toàn bộ 52 tuần, phân quyền, thời điểm mở khóa, báo cáo, lịch sử đánh giá và xuất dữ liệu.
+
+## Nâng cấp trải nghiệm trò chơi
+
+Mỗi tuần luân phiên một sân trắc nghiệm: cổng ánh sáng, đèn lồng, khinh khí cầu hoặc bệ đá. Cây 3D và thanh tiến độ lớn dần theo số câu đã lưu, không phụ thuộc đúng/sai. Mầm Nhỏ biết chào, chớp mắt; lễ hoàn thành có huy hiệu, ruy băng và cánh hoa, kèm mốc quý/năm ở tuần 13/26/39/52. Ngôi làng có thêm hồ, vườn hoa và chim đồng hành; mỗi vùng đảo có đồ vật riêng.
+
+Âm thanh chỉ phát khi người dùng bật. Hiệu ứng chuyển động có thể tắt và tôn trọng giảm chuyển động của hệ điều hành. Bản nâng cấp không đổi ngân hàng nội dung, khóa lưu dữ liệu hay quy tắc mở tuần.
