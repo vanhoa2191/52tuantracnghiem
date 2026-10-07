@@ -17,7 +17,7 @@ export function atriumFrustum(width,height){
   return {left:-halfHeight*aspect,right:halfHeight*aspect,top:halfHeight,bottom:-halfHeight};
 }
 
-export function mountAtrium({container,view='home',completed=0,onNavigate,onError,motion=true}){
+export function mountAtrium({container,view='home',completed=0,week=1,onNavigate,onError,motion=true}){
   const theme=Object.hasOwn(viewThemes,view)?viewThemes[view]:viewThemes.home;
   const reduced=globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches||false;
   let renderer;
@@ -45,6 +45,15 @@ export function mountAtrium({container,view='home',completed=0,onNavigate,onErro
   function mesh(g,color,pos,scale=[1,1,1],parent=scene){const m=new THREE.Mesh(g,mat(color));m.position.set(...pos);m.scale.set(...scale);parent.add(m);return m;}
   function pole(x,z,h=1.2){piece(geo.cyl,0xb38b67,[x,h/2+.13,z],[.07,h,.07]);piece(geo.ball,0xfce5a6,[x,h+.18,z],[.12,.12,.12]);}
   function tree(x,z,s=1){piece(geo.cyl,0x9d785b,[x,s*.8,z],[.2*s,s*1.6,.2*s]);piece(geo.ball,theme.leaf,[x,s*2.25,z],[s,s*1.1,s]);piece(geo.ball,0xb5d09b,[x+s*.45,s*2.8,z+s*.1],[s*.65,s*.72,s*.65]);}
+  function flower(x,z,color,s=1){
+    piece(geo.cyl,0x689a72,[x,.32*s,z],[.025*s,.5*s,.025*s]);
+    for(let p=0;p<5;p++){const a=p*Math.PI*2/5;piece(geo.ball,color,[x+Math.cos(a)*.105*s,.59*s,z+Math.sin(a)*.105*s],[.105*s,.045*s,.105*s]);}
+    piece(geo.ball,0xf3c966,[x,.61*s,z],[.07*s,.05*s,.07*s]);
+  }
+  function ribbon(x,y,z,color,rotation=0){
+    piece(geo.box,color,[x,y,z],[.22,.65,.065],[0,0,rotation]);
+    piece(geo.box,0xffefd0,[x,y+.32,z+.015],[.29,.08,.085],[0,0,rotation]);
+  }
   function starGeometry(){const shape=new THREE.Shape();for(let i=0;i<10;i++){const a=Math.PI/2+i*Math.PI/5,r=i%2?.46:1;const x=Math.cos(a)*r,y=Math.sin(a)*r;if(i===0)shape.moveTo(x,y);else shape.lineTo(x,y);}shape.closePath();const g=new THREE.ExtrudeGeometry(shape,{depth:.2,bevelEnabled:true,bevelSize:.08,bevelThickness:.06,bevelSegments:1,steps:1});resources.add(g);return g;}
   const star=starGeometry();
   function sign(text,x,y,z,color){const c=document.createElement('canvas');c.width=512;c.height=128;const ctx=c.getContext('2d');if(!ctx)return null;
@@ -64,6 +73,11 @@ export function mountAtrium({container,view='home',completed=0,onNavigate,onErro
   piece(geo.cone,0xb6bfa4,[0,-2.7,0],[9.1,4.1,9.1],[0,0,Math.PI]);
   for(let i=0;i<16;i++){const a=i*Math.PI/8;piece(geo.rock,i%2?0xddd1b5:0xc4c4a8,[Math.cos(a)*8.95,-.3,Math.sin(a)*8.95],[.7,.7,.55],[0,a,0]);}
   for(let i=0;i<30;i++){const a=i*Math.PI*2/30;piece(geo.cyl,0xf1e5c8,[Math.cos(a)*5.9,.16,Math.sin(a)*5.9],[.62,.13,.55]);}
+  // Small, shared-material prop kit: a lily pond, pebble bank and curved flower beds.
+  piece(geo.cyl,0xc9c4a4,[-2,.19,3.8],[1.35,.13,1.05]);piece(geo.cyl,0x9acdcf,[-2,.27,3.8],[1.15,.07,.87]);
+  for(let i=0;i<7;i++){const a=i*.9;piece(geo.rock,0xddd1b5,[-2+Math.cos(a)*1.2,.3,3.8+Math.sin(a)*.92],[.2,.17,.2],[0,a,0]);}
+  for(const [dx,dz] of [[-.35,.1],[.43,-.18]]){piece(geo.cyl,0x79a884,[-2+dx,.32,3.8+dz],[.22,.025,.19]);flower(-2+dx,3.8+dz,0xf5b1a1,.65);}
+  for(let i=0;i<18;i++){const a=i*.61;flower(Math.cos(a)*7.05,Math.sin(a)*7.05,[0xe1b8e6,0xf5b1a1,0xf4d685][i%3],.8+i%3*.12);}
   // Treehouse: trunk, angled supports, hexagonal room, leaf roof, balcony and rope ladder.
   const tx=-4.7,tz=-2.4;
   piece(geo.cyl,0x9c7756,[tx,2,tz],[.52,4,.52]);piece(geo.ball,theme.leaf,[tx-.8,5.3,tz],[1.9,1.7,1.7]);piece(geo.ball,0xb7d99c,[tx+1,5.9,tz-.45],[1.45,1.25,1.3]);
@@ -74,6 +88,9 @@ export function mountAtrium({container,view='home',completed=0,onNavigate,onErro
   piece(geo.box,0x62989a,[tx,3.4,tz+1.55],[.55,.62,.06]);piece(geo.box,0xffefba,[tx,2.95,tz+1.58],[.52,.17,.09]);
   for(const dx of[-.35,.35])piece(geo.cyl,0xe9cb97,[tx+dx,1.3,tz+1.8],[.045,2.45,.045],[.12,0,0]);
   for(let i=0;i<6;i++)piece(geo.box,0xc19a6c,[tx,.35+i*.35,tz+1.9-i*.04],[.8,.08,.14]);
+  // Roof ribs, porch leaves and a suspended seed-shaped lantern give the home a silhouette.
+  for(let i=0;i<5;i++){const a=i*Math.PI*2/5;piece(geo.box,0xb7d99c,[tx+Math.cos(a)*.9,4.36,tz+.3+Math.sin(a)*.9],[.12,1.05,.12],[Math.cos(a)*.55,0,-Math.sin(a)*.55]);}
+  piece(geo.cyl,0xad835a,[tx+.95,1.72,tz+1.25],[.035,.6,.035]);piece(geo.ball,0xffefba,[tx+.95,1.31,tz+1.25],[.19,.28,.19]);
   landmark('world','52 tuần',tx,tz,1.8,5.7,0x83b58e);
   // Library tower: layered sandstone, cap, door arch and rainbow book spines.
   const lx=4.3,lz=-3;
@@ -81,6 +98,8 @@ export function mountAtrium({container,view='home',completed=0,onNavigate,onErro
   for(let i=0;i<5;i++){const a=i*Math.PI*2/5;piece(geo.box,0x9ab9b3,[lx+Math.sin(a)*1.43,2.7,lz+Math.cos(a)*1.43],[.45,.9,.09],[0,a,0]);}
   piece(geo.box,0xa47858,[lx,1.1,lz+1.45],[.75,1.8,.12]);piece(geo.ball,0xffdb81,[lx+.23,1.1,lz+1.56],[.06,.06,.06]);
   for(let i=0;i<6;i++)piece(geo.box,[0xbbacd9,0xe6ba95,0x8caf99][i%3],[lx-.8+i*.29,.55,lz+2],[.24,.7+i%2*.2,.8],[0,0,(i-2)*.025]);
+  for(let i=0;i<6;i++)piece(geo.box,0xffefd0,[lx-.8+i*.29,.67,lz+2.41],[.14,.045,.025]);
+  piece(geo.box,0xcfaa78,[lx+1.6,.58,lz+1.7],[.9,.12,.65]);for(const dx of[-.3,.3])piece(geo.box,0xad835a,[lx+1.6+dx,.3,lz+1.7],[.09,.6,.09]);
   landmark('parents','Góc cha mẹ',lx,lz,1.7,5.3,0xaba7d1);
   // Badge pavilion with authored star crest, columns, flowering garden.
   const bx=-4.8,bz=4;
@@ -105,6 +124,7 @@ export function mountAtrium({container,view='home',completed=0,onNavigate,onErro
   for(const z of[2.95,4.65]){for(const x of[-.8,1.1])pole(x,z,.8);piece(geo.box,0xe4c69c,[.15,1.08,z],[1.9,.07,.07]);}
   // View-specific centerpiece; all routes have distinct silhouettes, not only recoloring.
   const cx=0,cz=-.9;
+  let ceremonyPetals=null;
   piece(geo.cyl,0xf3e4c8,[cx,.3,cz],[1.8,.35,1.8]);
   if(theme.center==='tree'||theme.center==='garden'){tree(cx,cz,1.45);for(let i=0;i<5;i++){const a=i*1.3;piece(geo.ball,theme.accent,[Math.cos(a)*1.55,.42,cz+Math.sin(a)*1.55],[.22,.27,.22]);}}
   else if(theme.center==='book'){
@@ -120,40 +140,83 @@ export function mountAtrium({container,view='home',completed=0,onNavigate,onErro
   }else{
     piece(geo.cyl,0xf2ce86,[cx,1,cz],[.7,1.2,.7]);const badge=mesh(star,theme.accent,[cx,2.3,cz],[1.05,1.05,1.05]);moving.push({object:badge,base:2.3,phase:0,type:'float'});
     const earned=Math.min(12,Math.max(0,Math.floor(completed)));for(let i=0;i<earned;i++){const a=i*Math.PI*2/Math.max(1,earned);piece(star,0xffe29a,[Math.cos(a)*1.55,.75,cz+Math.sin(a)*1.55],[.2,.2,.2],[0,a,0]);}
+    if(view==='celebrate'){
+      // A ceremony celebrates a completed week, regardless of the child's quiz score.
+      piece(geo.cyl,0xffead0,[cx,.54,cz],[1.6,.25,1.6]);piece(geo.cyl,0xe5cfac,[cx,.75,cz],[1.14,.2,1.14]);
+      for(const side of[-1,1]){piece(geo.cyl,0xb68d63,[side*2.15,1.7,cz],[.085,3,.085]);piece(geo.ball,0xffe29a,[side*2.15,3.3,cz],[.17,.17,.17]);ribbon(side*1.85,2.8,cz,0xf5b1a1,side*.2);ribbon(side*2.38,2.66,cz,0xbbacd9,-side*.15);}
+      const milestone=Number.isInteger(week)&&week%13===0;
+      const arch=mesh(geo.ring,0xf2ce86,[cx,2.45,cz-.45],[2.25,2.25,2.25]);
+      arch.rotation.y=.08;
+      if(milestone)for(let i=0;i<5;i++)piece(star,0xe1b8ed,[-1.4+i*.7,3.8+Math.sin(i*.8)*.25,cz-.4],[.18,.18,.18]);
+      const petalGeo=new THREE.PlaneGeometry(.18,.3),petalMat=new THREE.MeshBasicMaterial({color:0xffffff,side:THREE.DoubleSide});resources.add(petalGeo);resources.add(petalMat);
+      ceremonyPetals=new THREE.InstancedMesh(petalGeo,petalMat,24);resources.add(ceremonyPetals);ceremonyPetals.frustumCulled=false;scene.add(ceremonyPetals);
+      for(let i=0;i<24;i++)ceremonyPetals.setColorAt(i,new THREE.Color([0xf5b1a1,0xe1b8e6,0xf4d685,0xb5d09b][i%4]));
+      ceremonyPetals.instanceColor.needsUpdate=true;
+    }
   }
   // Character with cape, backpack, articulated arms, leaf hat and a cheerful face.
   const mascot=new THREE.Group();mascot.position.set(0,.25,2.1);scene.add(mascot);
   mesh(geo.cyl,0x498974,[0,.72,0],[.36,.85,.3],mascot);mesh(geo.ball,0xffd9b2,[0,1.45,0],[.48,.49,.44],mascot);
   mesh(geo.box,0xe6c386,[0,.76,-.32],[.48,.64,.22],mascot);mesh(geo.cone,0x7aac86,[0,1.91,0],[.57,.38,.55],mascot);
   const leaf=mesh(geo.ball,0x94c078,[.24,2.14,0],[.29,.085,.17],mascot);leaf.rotation.z=.3;
-  for(const dx of[-.19,.19]){mesh(geo.ball,0x36534a,[dx,1.49,.4],[.045,.065,.04],mascot);mesh(geo.ball,0xf5b8a1,[dx*1.65,1.36,.33],[.085,.035,.035],mascot);mesh(geo.ball,0xc99462,[dx,.15,.06],[.2,.15,.29],mascot);}
+  const eyes=[];
+  for(const dx of[-.19,.19]){eyes.push(mesh(geo.ball,0x36534a,[dx,1.49,.4],[.045,.065,.04],mascot));mesh(geo.ball,0xf5b8a1,[dx*1.65,1.36,.33],[.085,.035,.035],mascot);mesh(geo.ball,0xc99462,[dx,.15,.06],[.2,.15,.29],mascot);}
   const smile=mesh(geo.ring,0x8a6048,[0,1.32,.415],[.1,.07,.07],mascot);smile.rotation.x=.2;
-  for(const dx of[-.48,.48]){mesh(geo.cyl,0x4f977c,[dx,.88,0],[.13,.5,.13],mascot);mesh(geo.ball,0xffd9b2,[dx,.6,.04],[.13,.15,.13],mascot);}
+  const arms=[];
+  for(const dx of[-.48,.48]){const arm=new THREE.Group();arm.position.set(dx,1.1,0);mascot.add(arm);mesh(geo.cyl,0x4f977c,[0,-.22,0],[.13,.5,.13],arm);mesh(geo.ball,0xffd9b2,[0,-.5,.04],[.13,.15,.13],arm);arms.push(arm);}
+  mesh(geo.box,0xffe29a,[0,.83,.31],[.13,.13,.04],mascot);mesh(geo.box,0xf0dab2,[0,.45,.01],[.75,.1,.62],mascot);
+  // A tiny perched guide bird remains legible without adding a separate light or texture.
+  const guide=new THREE.Group();guide.position.set(1.3,1.3,2.15);scene.add(guide);
+  mesh(geo.ball,0xf3c966,[0,0,0],[.24,.22,.24],guide);mesh(geo.cone,0xe6ba95,[0,-.01,.28],[.09,.18,.09],guide).rotation.x=Math.PI/2;
+  for(const dx of[-.09,.09])mesh(geo.ball,0x36534a,[dx,.08,.19],[.025,.03,.025],guide);
+  for(const side of[-1,1])mesh(geo.ball,0xffefd0,[side*.21,-.01,0],[.09,.16,.22],guide).rotation.z=side*.5;
+  moving.push({object:guide,base:1.3,phase:1,type:'float'});
   // Midground bushes, lanterns and a few clouds frame rather than cover decisions.
   for(let i=0;i<12;i++){const a=i*2.399;const r=7.9;piece(geo.ball,i%2?0x83b38f:0xa9c694,[Math.cos(a)*r,.45,Math.sin(a)*r],[.55,.6,.55]);}
   for(const [x,z]of[[-2,4.8],[2.8,-.7],[-2.8,-5.8]]){pole(x,z,1.35);piece(geo.box,0xffefb6,[x,1.6,z],[.28,.35,.28]);piece(geo.cone,0x77917a,[x,1.85,z],[.28,.2,.28]);}
   for(let i=0;i<4;i++){const cloud=new THREE.Group();for(let c=0;c<3;c++)mesh(geo.ball,0xf8fbf2,[c*.65,Math.sin(c)*.15,0],[.8,.4,.55],cloud);cloud.position.set(-8+i*5,-2.3-i%2*.9,6+i%2*3);scene.add(cloud);moving.push({object:cloud,base:cloud.position.y,phase:i,type:'float'});}
   for(const [color,parts]of batches){const merged=mergeGeometries(parts);parts.forEach(p=>p.dispose());if(merged){resources.add(merged);scene.add(new THREE.Mesh(merged,mat(color)));}}
   let disposed=false,paused=false,allowMotion=!!motion&&!reduced,dirty=true,raf=0,last=0,elapsed=0,selected=-1,pointerStart=null;
+  const petalTransform=new THREE.Object3D();
+  function updatePetals(time){
+    if(!ceremonyPetals)return;
+    ceremonyPetals.visible=allowMotion&&time<7;
+    if(!ceremonyPetals.visible)return;
+    const finish=Math.min(1,(7-time)/1.5);
+    for(let i=0;i<24;i++){
+      const a=i*2.399,fall=(time*.72+i*.17)%4.5;
+      petalTransform.position.set(Math.cos(a)*(1.2+i%3*.6)+Math.sin(time+i)*.18,4.7-fall,cz+Math.sin(a)*(1.2+i%3*.6));
+      petalTransform.rotation.set(time*.7+i,Math.sin(time+i)*.5,a+time*.4);
+      petalTransform.scale.setScalar(finish);petalTransform.updateMatrix();ceremonyPetals.setMatrixAt(i,petalTransform.matrix);
+    }
+    ceremonyPetals.instanceMatrix.needsUpdate=true;
+  }
+  updatePetals(0);
   const ray=new THREE.Raycaster(),pointer=new THREE.Vector2();
   function select(index){selected=index;landmarks.forEach((l,i)=>{l.halo.visible=i===index;if(l.sprite)l.sprite.scale.set(i===index?3.52:3.3,i===index?.885:.83,1);});canvas.style.cursor=index>=0?'pointer':'default';dirty=true;}
   function hit(e){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return -1;pointer.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(pointer,camera);const found=ray.intersectObjects(pickable,false)[0];return found?landmarks.findIndex(l=>l.route===found.object.userData.route):-1;}
   const hover=e=>{if(paused)return;select(hit(e));};const down=e=>{if(paused)return;canvas.focus({preventScroll:true});pointerStart=[e.clientX,e.clientY];};
   const up=e=>{if(paused||!pointerStart)return;const travel=Math.hypot(e.clientX-pointerStart[0],e.clientY-pointerStart[1]);pointerStart=null;if(travel>9)return;const index=hit(e);select(index);if(index>=0)onNavigate?.(landmarks[index].route);};
   const leave=()=>select(-1);
+  const cancelPointer=()=>{pointerStart=null;};
   const key=e=>{if(paused)return;if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();const direction=['ArrowLeft','ArrowUp'].includes(e.key)?-1:1;select(selected<0?0:(selected+direction+landmarks.length)%landmarks.length);canvas.setAttribute('aria-label',`${landmarks[selected].label}. Nhấn Enter để đi vào, phím mũi tên để chọn mục khác.`);}else if(e.key==='Enter'){e.preventDefault();if(selected<0)select(0);onNavigate?.(landmarks[selected].route);}};
-  canvas.addEventListener('pointermove',hover);canvas.addEventListener('pointerdown',down);canvas.addEventListener('pointerup',up);canvas.addEventListener('pointerleave',leave);canvas.addEventListener('keydown',key);
+  canvas.addEventListener('pointermove',hover);canvas.addEventListener('pointerdown',down);canvas.addEventListener('pointerup',up);canvas.addEventListener('pointerleave',leave);canvas.addEventListener('pointercancel',cancelPointer);canvas.addEventListener('blur',cancelPointer);canvas.addEventListener('keydown',key);
   function resize(){if(disposed)return;const width=container.clientWidth,height=container.clientHeight;if(!width||!height)return;renderer.setSize(width,height,false);Object.assign(camera,atriumFrustum(width,height));camera.updateProjectionMatrix();dirty=true;}
   const observer=new ResizeObserver(resize);observer.observe(container);resize();
   const lost=e=>{e.preventDefault();dispose();onError?.('Ngôi làng 3D đang tạm nghỉ. Con có thể dùng các nút bên dưới để tiếp tục.');};canvas.addEventListener('webglcontextlost',lost);
   function frame(time){if(disposed)return;raf=requestAnimationFrame(frame);if(document.hidden||paused){last=time;return;}if(time-last<1000/30)return;const dt=Math.min((time-last)/1000,.05);last=time;
     // Ambient welcome lasts eight seconds, then settles; input still highlights landmarks.
     if(allowMotion&&elapsed<8){elapsed=Math.min(8,elapsed+dt);const fade=Math.min(1,(8-elapsed)/1.5);mascot.rotation.y=Math.sin(elapsed*.8)*.08*fade;
+      mascot.position.y=.25+Math.sin(elapsed*2)*.025*fade;
+      const blink=elapsed%3.1;eyes.forEach(eye=>{eye.scale.y=blink>2.72&&blink<2.88?.012:.065;});
+      arms[1].rotation.z=(1.9+Math.sin(elapsed*7)*.22)*Math.min(1,elapsed*2)*Math.max(0,Math.min(1,5-elapsed));
+      arms[0].rotation.z=Math.sin(elapsed*1.5)*.07*fade;
+      updatePetals(elapsed);
       moving.forEach(m=>{if(m.type==='float')m.object.position.y=m.base+Math.sin(elapsed*1.15+m.phase)*.12*fade;else m.object.rotation.y+=dt*.18*fade;});dirty=true;}
     if(dirty){renderer.render(scene,camera);dirty=false;}
   }
   raf=requestAnimationFrame(frame);
-  function dispose(){if(disposed)return;disposed=true;cancelAnimationFrame(raf);observer.disconnect();canvas.removeEventListener('pointermove',hover);canvas.removeEventListener('pointerdown',down);canvas.removeEventListener('pointerup',up);canvas.removeEventListener('pointerleave',leave);canvas.removeEventListener('keydown',key);canvas.removeEventListener('webglcontextlost',lost);resources.forEach(r=>r.dispose());renderer.dispose();canvas.remove();}
-  function setMotion(enabled){allowMotion=!!enabled&&!reduced;if(!allowMotion){mascot.rotation.y=0;moving.forEach(m=>{if(m.type==='float')m.object.position.y=m.base;});}dirty=true;}
-  return {dispose,setMotion,setPaused(value){paused=!!value;dirty=true;},diagnostics(){return {view,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures,materials:materials.size,postPasses:0,shadowLights:0,dpr:renderer.getPixelRatio(),motion:allowMotion,paused,disposed};}};
+  function dispose(){if(disposed)return;disposed=true;cancelAnimationFrame(raf);observer.disconnect();canvas.removeEventListener('pointermove',hover);canvas.removeEventListener('pointerdown',down);canvas.removeEventListener('pointerup',up);canvas.removeEventListener('pointerleave',leave);canvas.removeEventListener('pointercancel',cancelPointer);canvas.removeEventListener('blur',cancelPointer);canvas.removeEventListener('keydown',key);canvas.removeEventListener('webglcontextlost',lost);resources.forEach(r=>r.dispose());renderer.dispose();canvas.remove();}
+  function setMotion(enabled){const next=!!enabled&&!reduced;if(next&&!allowMotion)elapsed=0;allowMotion=next;if(!allowMotion){mascot.rotation.y=0;mascot.position.y=.25;eyes.forEach(eye=>{eye.scale.y=.065;});arms.forEach(arm=>{arm.rotation.z=0;});moving.forEach(m=>{if(m.type==='float')m.object.position.y=m.base;});}updatePetals(elapsed);dirty=true;}
+  return {dispose,setMotion,setPaused(value){paused=!!value;if(paused)cancelPointer();dirty=true;},diagnostics(){return {view,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures,materials:materials.size,postPasses:0,shadowLights:0,dpr:renderer.getPixelRatio(),motion:allowMotion,paused,disposed};}};
 }

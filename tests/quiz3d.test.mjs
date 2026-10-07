@@ -3,13 +3,14 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 import * as THREE from 'three';
+import {stageForWeek,growthMarkup} from '../public/game-journey.mjs';
 import {quizTheme,createPortalInput} from '../public/game-input.mjs';
 import {gatePosition,quizFrustum} from '../src/quiz.mjs';
 const source=readFileSync(new URL('../public/app.mjs',import.meta.url),'utf8');
 const quizSource=source.slice(source.indexOf('function quiz(){'),source.indexOf('async function activateQuiz'));
 const bank=JSON.parse(readFileSync(new URL('../data/content.json',import.meta.url),'utf8'));
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function markup(w,q,selected){const order=['D','B','A','C'];const question={...q,order,selected,isCorrect:q.acceptedAnswers.includes(selected)};const context={attempt:{id:'test',week:w.id,questions:[question]},quizCursor:0,week:()=>w,esc,quizTheme,QUARTERS:[{icon:'🌱'},{icon:'📖'},{icon:'🌿'},{icon:'☀️'}]};return vm.runInNewContext(quizSource+';quiz()',context);}
+function markup(w,q,selected){const order=['D','B','A','C'];const question={...q,order,selected,isCorrect:q.acceptedAnswers.includes(selected)};const context={attempt:{id:'test',week:w.id,questions:[question]},quizCursor:0,week:()=>w,esc,quizTheme,stageForWeek,growthMarkup,QUARTERS:[{icon:'🌱'},{icon:'📖'},{icon:'🌿'},{icon:'☀️'}]};return vm.runInNewContext(quizSource+';quiz()',context);}
 test('all 520 questions use the same canonical choices in their visible letters and 3D gate controls',()=>{for(const w of bank.weeks)for(const q of w.questions){const html=markup(w,q);assert.equal((html.match(/data-action="answer"/g)||[]).length,4);assert.ok(html.includes(esc(q.scenario)));for(const [i,key] of ['D','B','A','C'].entries()){assert.ok(html.includes(`data-choice="${key}" ><span class="letter">${'ABCD'[i]}</span><span>${esc(q.options[key])}</span>`));}assert.ok(!html.includes('class="feedback'));}});
 test('answered 3D questions keep all four explanations, disable choices, and preserve valid alternatives',()=>{for(const w of bank.weeks)for(const q of w.questions){const html=markup(w,q,q.acceptedAnswers.at(-1));assert.equal((html.match(/data-choice="[A-D]" disabled/g)||[]).length,4);assert.equal((html.match(/class="explanation-row"/g)||[]).length,4);assert.ok(html.includes(esc(q.explanation)));for(const key of Object.keys(q.options)){const explanation=key===q.answer?q.explanation:q.validAlternatives?.[key]||q.optionExplanations[key];assert.ok(html.includes(esc(explanation)));}assert.ok(html.includes('id="quiz-response"'));}});
 test('all four gate meshes and letter markers fit the desktop camera and do not overlap',()=>{const f=quizFrustum(1040,340);const camera=new THREE.OrthographicCamera(f.left,f.right,f.top,f.bottom,.1,100);camera.position.set(0,9,16);camera.lookAt(0,1,0);camera.updateMatrixWorld();for(let i=0;i<4;i++){const [x]=gatePosition(i);for(const pos of [[x-1.5,0,0],[x+1.5,5.2,0]]){const p=new THREE.Vector3(...pos).project(camera);assert.ok(Math.abs(p.x)<1&&Math.abs(p.y)<1);}if(i)assert.ok(x-gatePosition(i-1)[0]>3.4);}});

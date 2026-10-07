@@ -21,3 +21,13 @@ Independent code review found and resolved: world settings pause/motion missing;
 Direct WebGL browser rendering, screenshots, touch playtests and GPU/FPS measurements cannot be performed with the tools available in this session. No browser was installed and no substitute browser-control infrastructure was introduced. Renderer diagnostics are available in scene controllers for subsequent checks. No premium/AAA or measured performance claim.
 
 Sites publication must be confirmed by native deployment success. GitHub synchronization must use checked blobs, preserve current main history and verify branch head. Supabase remains deferred; user progress stays in the existing browser store.
+
+## Game feel release — 2026-10-07
+
+Implemented four authored answer stages, companion gesture/blink, progress-driven sprout, score-independent weekly ceremony and quarterly/yearly milestone treatment. Village kit includes lily pond, flowers, roof/porch/library details and guide bird. World biome props include swing, books, tent, lanterns and small water features.
+
+Validation: `npm test` passed 27/27; `npm run build` passed; `git diff --check` passed. Curriculum build hash remains `81d9dedab5f4` (52 weeks, 520 questions, 16 portraits). New scene tests use real Three geometries with a stub renderer: all four stage constructors, shuffled canonical keyboard choices, pending/pause/confirmed locks, sprout progression, reduced-motion state and disposal. These are not browser/GPU tests. Existing tests cover all 520 explanations, whole-year guest/backend API progression, backup recovery, monthly/quarterly/yearly assessments and seven-day first-completion boundary.
+
+Focused independent code review resolved instanced-petal disposal, pointer cancellation/blur handling and saved motion preference for feedback scrolling. No open code-review blockers. Browser-control capability is unavailable, so no production screenshots, actual touch playthrough, pixel evidence, GPU timing or AAA scorecard are claimed. Procedural models require no external credential, service or CDN.
+
+Sound remains explicitly opt-in; preexisting local storage and first completion timestamps remain intact. Supabase remains deferred. Reviewable source on GitHub branch `game-juice`; the existing public Sites deployment is updated through its own source repository.
