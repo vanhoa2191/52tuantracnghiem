@@ -6,30 +6,25 @@
   <title>Mầm Sáng • Hành trình 52 tuần</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='20' fill='%23245948'/%3E%3Ctext x='10' y='46' font-size='42'%3E🌱%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="village.css">
 </head>
 <body>
 <a class="skip" href="#main">Đến nội dung chính</a>
-<aside class="sidebar">
-  <a href="#home" class="brand"><span class="brand-icon">✦</span><span>Mầm Sáng<small>CÙNG CON LỚN LÊN</small></span></a>
-  <div class="nav-label">HÀNH TRÌNH CỦA CON</div>
-  <nav aria-label="Điều hướng chính">
-    <a href="#home" data-nav="home"><span>⌂</span> Khu vườn của con</a>
-    <a href="#journey" data-nav="journey"><span>✦</span> Thế giới 3D</a>
-    <a href="#map" data-nav="map"><span>▦</span> Bản đồ 52 tuần</a>
-    <a href="#badges" data-nav="badges"><span>✧</span> Bộ sưu tập huy hiệu</a>
-    <a href="#practice" data-nav="practice"><span>↻</span> Thử thêm một lần</a>
-    <a href="#parents" data-nav="parents"><span>♡</span> Cùng cha mẹ</a>
-    <a href="#reports" data-nav="reports"><span>▤</span> Nhìn lại & ghi nhận</a>
-  </nav>
-  <div class="side-note"><span class="tiny-sprout">🌱</span><strong>Mỗi bước nhỏ đều đáng quý.</strong><p>Con cứ đi theo nhịp của mình. Mầm Sáng luôn ở đây!</p><span class="side-line"></span></div>
-  <div class="side-footer">52 tuần · Một năm yêu thương</div>
-</aside>
 <div class="workspace">
-  <header class="topbar"><span class="breadcrumb">Hành trình một năm <span>/</span> <strong id="view-label">Khu vườn</strong></span><div class="profile-tools"><label for="profile-select" class="sr-only">Chọn hồ sơ của bé</label><span class="avatar">☺</span><select id="profile-select" aria-label="Chọn hồ sơ của bé"></select><button class="icon-button" data-action="add-profile" aria-label="Thêm hồ sơ cho bé">＋</button></div></header>
+  <header class="topbar game-topbar"><a href="#home" class="brand"><span class="brand-icon">✦</span><span>Mầm Sáng<small>THẾ GIỚI CỦA CON</small></span></a><span id="view-label" class="game-location">Làng Mầm Sáng</span><div class="profile-tools"><label for="profile-select" class="sr-only">Chọn hồ sơ của bé</label><span class="avatar">☺</span><select id="profile-select" aria-label="Chọn hồ sơ của bé"></select><button class="icon-button" data-action="add-profile" aria-label="Thêm hồ sơ cho bé">＋</button><button class="icon-button" data-action="game-settings" aria-label="Tùy chỉnh âm thanh và chuyển động">⚙</button></div></header>
+  <nav class="village-nav" aria-label="Các địa điểm trong thế giới Mầm Sáng">
+    <a href="#home" data-nav="home"><span class="nav-sculpture house">⌂</span><span>Làng Mầm Sáng</span></a>
+    <a href="#world" data-nav="world"><span class="nav-sculpture compass">✦</span><span>52 đảo nhiệm vụ</span></a>
+    <a href="#badges" data-nav="badges"><span class="nav-sculpture flower">❀</span><span>Vườn kỷ niệm</span></a>
+    <a href="#practice" data-nav="practice"><span class="nav-sculpture loop">↻</span><span>Sân luyện tập</span></a>
+    <a href="#parents" data-nav="parents"><span class="nav-sculpture book">▣</span><span>Nhà đồng hành</span></a>
+    <a href="#reports" data-nav="reports"><span class="nav-sculpture moon">◉</span><span>Đài quan sát</span></a>
+  </nav>
   <main id="main" tabindex="-1"><div class="loading"><span>🌱</span> Đang đánh thức khu vườn…</div></main>
   <footer class="footer"><span>Được nuôi dưỡng bằng những điều tốt đẹp ♡</span><span id="sync-status">Tiến độ lưu trên trình duyệt này</span><button class="text-button" data-action="export">Tải dữ liệu của bé</button></footer>
 </div>
 <dialog id="profile-dialog"><form id="profile-create-form"><span class="eyebrow">MỘT KHU VƯỜN RIÊNG CHO BÉ</span><h2>Mình gọi con là gì? 🌱</h2><label class="journal-label" for="child-name">Tên hoặc biệt danh của bé</label><input id="child-name" name="name" maxlength="30" required autocomplete="off" placeholder="Ví dụ: An, Mít, Bông…"><p>Không cần tài khoản. Hồ sơ lưu trên trình duyệt này.</p><div class="journal-actions"><button class="primary" type="submit">Tạo khu vườn →</button><button class="secondary" type="button" data-action="close-profile">Để sau</button></div></form></dialog>
+<dialog id="week-list-dialog" aria-labelledby="week-list-title"><div class="dialog-title"><h2 id="week-list-title">52 đảo nhiệm vụ</h2><button class="secondary" data-action="close-week-list">Đóng ✕</button></div><div id="week-list-content"></div></dialog>
 <dialog id="game-settings" aria-labelledby="game-settings-title"><h2 id="game-settings-title">Góc chơi của con 🌱</h2><p>Chọn cách chơi khiến con thấy thoải mái.</p><label class="game-setting"><input id="game-sound" type="checkbox"> Âm thanh nhẹ khi chọn cổng</label><label class="game-setting"><input id="game-motion" type="checkbox"> Chuyển động và đốm sáng</label><details class="game-controls"><summary>Cách điều khiển</summary><p>Chạm cổng hoặc thẻ đáp án để chọn. Trong cảnh 3D, dùng ← → để xem cổng, Enter để chọn; phím 1–4 chọn trực tiếp. Mỗi câu chỉ lưu một lựa chọn.</p></details><button class="primary" data-action="close-game-settings">Tiếp tục chơi →</button></dialog>
 <input id="import-file" type="file" accept="application/json,.json" hidden>
 <div id="toast" role="status" aria-live="polite"></div>

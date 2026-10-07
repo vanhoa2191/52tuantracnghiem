@@ -1,6 +1,6 @@
 export const WORLDS=[['🌳','Rừng trái tim'],['📖','Đảo tri thức'],['🌻','Vườn kết nối'],['🏰','Thành phố ánh sáng']];
 export function worldMarkup({name,completed,selected,weekOptions,escape}){
-  return `<div class="world-heading"><div><div class="eyebrow">MẦM SÁNG · CUỘC PHIÊU LƯU 3D</div><h1>52 đảo nhỏ, một thế giới lớn</h1><p>Chạm một đảo để bay tới. Mỗi nhiệm vụ hoàn thành sẽ đánh thức một cây xanh.</p></div><a class="secondary" href="#map">▦ Bản đồ 2D</a></div>
+  return `<div class="world-heading"><div><div class="eyebrow">MẦM SÁNG · CUỘC PHIÊU LƯU 3D</div><h1>52 đảo nhỏ, một thế giới lớn</h1><p>Chạm một đảo để bay tới. Mỗi nhiệm vụ hoàn thành sẽ đánh thức một cây xanh.</p></div><button class="secondary" data-action="week-list">▦ Danh sách nhiệm vụ</button></div>
   <section class="world-shell" aria-label="Trò chơi khám phá 52 tuần">
     <div class="world-canvas" id="world-canvas"><div class="world-loading"><span>🌱</span> Đang đánh thức thế giới của con…</div></div>
     <div class="world-top"><div class="world-id"><span>✦</span><div><strong>${escape(name)}</strong><small>${completed} / 52 cây đã thức giấc</small></div></div><button class="world-camera-button" data-action="world-overview" aria-label="Xem toàn bộ 52 đảo">⊞ <span>Toàn cảnh</span></button></div>

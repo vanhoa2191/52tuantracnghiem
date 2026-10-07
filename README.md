@@ -2,11 +2,15 @@
 
 52 bộ tình huống (520 câu), 16 chân dung trong bảng tự đánh giá, bản tổng kết năm và tài liệu nguyên văn.
 
-## Thế giới 3D
+## Toàn bộ giao diện 3D
 
-`src/world.mjs` dựng thế giới Three.js gồm 52 đảo, 4 vùng, nhân vật bay tới đảo đã mở, cây lớn lên theo tuần hoàn thành và trò nhặt 3 đốm sáng tự do. Đốm sáng là tương tác khám phá, không thay đổi điểm, mốc mở khóa hay dữ liệu làm bài. `#world` và `#journey` mở thế giới 3D; `#map` giữ toàn bộ lộ trình 2D. Có chọn đảo bằng bàn phím/dropdown và tự hiển thị đường dẫn sang 2D khi WebGL không có hoặc mất context.
+Mọi trang đều có cảnh Three.js thực: `src/atrium.mjs` dựng làng nổi, vườn huy hiệu, sân luyện tập, thư viện phụ huynh, đài quan sát báo cáo, suối nhật ký và cây vinh danh. Các địa điểm có thể chạm hoặc chọn bằng bàn phím. `src/world.mjs` dựng 52 đảo nhiệm vụ; `src/quiz.mjs` dựng bốn cổng đáp án. `#map` và `#journey` là các lối vào cùng thế giới 3D. Danh sách tuần mở trong hộp thoại để chọn theo quý, kể cả khi thiết bị không hỗ trợ WebGL.
 
-Three.js được đóng gói cùng artifact, không tải từ CDN. Cảnh gom các geometry tĩnh theo material, giới hạn pixel ratio và tốc độ khung hình; tôn trọng reduced-motion. Rời cảnh sẽ giải phóng renderer, controls, geometry, texture và bộ quan sát kích thước. Ngân hàng câu hỏi, khóa phiên bản dữ liệu, tiến độ và báo cáo không thay đổi.
+`public/scene-ui.mjs` quản lý địa điểm và giao diện; `public/village.css` thống nhất bề mặt, điều hướng và biểu mẫu. Chữ, câu hỏi, lời giải và đánh giá vẫn dùng DOM để dễ đọc và thao tác. Màn hình chào có cảnh 3D trước khi tạo hồ sơ. Nội dung dài có cảnh làng bên trái trên máy tính và bố cục dọc trên điện thoại.
+
+Chỉ một renderer hoạt động trong mỗi trang. Three.js được đóng gói trong artifact, không tải từ CDN. Cảnh dùng geometry được gom theo material, giới hạn DPR, hỗ trợ giảm chuyển động và tạm dừng khi mở hộp thoại. Rời trang giải phóng renderer, geometry, texture và event listener. Khi WebGL không có hoặc mất context, các nút nội dung vẫn dùng được. Lưu bài và mở tuần không thuộc renderer.
+
+Skill nguồn: [threejs-game-skills](https://github.com/majidmanzarpour/threejs-game-skills). Thiết kế và giới hạn kiểm chứng ghi tại `artifacts/game-progress.md` và `artifacts/final-evidence.md`. Chưa có kiểm tra hình ảnh/trò chơi WebGL trực tiếp trong trình duyệt ở phiên làm việc này.
 
 ## Giai đoạn hiện tại: dùng không cần đăng nhập
 
@@ -22,7 +26,7 @@ Node.js 24+, `npm ci`, `npm test`, `npm run build`. Đầu ra là Worker ESM t�
 
 ## Dữ liệu và phân quyền
 
-Sites cung cấp định danh tài khoản qua header `oai-authenticated-user-id`. Mọi API yêu cầu định danh và kiểm tra hồ sơ thuộc tài khoản đó. Mỗi gia đình có tối đa 8 hồ sơ. Không lưu kết quả trắc nghiệm trong localStorage; trình duyệt chỉ nhớ hồ sơ được chọn.
+Sites cung cấp định danh tài khoản qua header `oai-authenticated-user-id`. Các API gia đình của backend đã chuẩn bị yêu cầu định danh và kiểm tra hồ sơ thuộc tài khoản đó. Giao diện khách hiện tại lưu kết quả trong localStorage như mô tả ở trên; Supabase chưa kết nối. Mỗi gia đình có tối đa 8 hồ sơ.
 
 Máy chủ lưu hồ sơ, lượt làm, lựa chọn gốc, thứ tự lựa chọn hiển thị, thời gian trả lời, mốc hoàn thành đầu tiên, nhật ký tuần và lịch sử đánh giá. Thời gian mở khóa là mốc hoàn thành đầu tiên của tuần trước + 604800000 ms. Lượt luyện không thay đổi mốc này. Hoàn thành cần đủ 10 tình huống, không cần điểm tối thiểu.
 
