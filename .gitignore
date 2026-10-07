@@ -1,0 +1,8 @@
+node_modules/
+.sites-runtime/
+.wrangler/
+dist/
+*.tar.gz
+*.sqlite
+server/assets.mjs
+server/index.mjs

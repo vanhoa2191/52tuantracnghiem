@@ -1,0 +1,1 @@
+ALTER TABLE `attempts` ADD `option_order` text DEFAULT '{}' NOT NULL;

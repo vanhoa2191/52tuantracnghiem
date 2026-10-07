@@ -1,0 +1,69 @@
+{
+  "totalWeeks": 52,
+  "totalQuestions": 520,
+  "exactScenarioGroups": [],
+  "exactFullQuestionGroups": [],
+  "candidatePairs": [
+    {
+      "a": "07.05",
+      "b": "27.09",
+      "similarity": 0.763,
+      "scenarioA": "Bố nhắc nhở con điều chỉnh tư thế ngồi học cho thẳng lưng.",
+      "scenarioB": "Mẹ nhắc nhở con điều chỉnh tư thế lưng khi ngồi xem tivi."
+    },
+    {
+      "a": "01.06",
+      "b": "31.02",
+      "similarity": 0.701,
+      "scenarioA": "Bố mẹ bận việc nên chưa kịp đưa con đi chơi công viên như đã hứa vào cuối tuần.",
+      "scenarioB": "Bố mẹ bận việc đột xuất nên chưa kịp đưa em đi công viên như đã hứa. Em nên có nhận thức thế nào?"
+    },
+    {
+      "a": "07.07",
+      "b": "36.04",
+      "similarity": 0.688,
+      "scenarioA": "Trong thảo luận nhóm, một bạn đưa ra ý kiến trái ngược với con nhưng rất hợp lý.",
+      "scenarioB": "Một bạn đưa ra ý kiến trái ngược với em trong buổi thảo luận nhóm. Em thể hiện sự lắng nghe không định kiến như thế nào?"
+    },
+    {
+      "a": "38.07",
+      "b": "49.01",
+      "similarity": 0.683,
+      "scenarioA": "Khi em nhận được số tiền lì xì hoặc tiền thưởng học giỏi, em quản lý ra sao vì động lực Gia đình?",
+      "scenarioB": "Khi nhận được số tiền thưởng học giỏi từ bố mẹ hoặc tiền lì xì, thái độ trân trọng tiền bạc chuẩn xác là gì?"
+    },
+    {
+      "a": "42.06",
+      "b": "42.08",
+      "similarity": 0.664,
+      "scenarioA": "Khi lớp trưởng lỡ làm sai một việc trong phân công công việc lớp, cách ứng xử làm gương chuẩn xác là gì?",
+      "scenarioB": "Khi phân công công việc làm báo tường cho lớp, thái độ làm gương của người lớp trưởng là gì?"
+    },
+    {
+      "a": "13.10",
+      "b": "26.08",
+      "similarity": 0.628,
+      "scenarioA": "Nhìn lại toàn bộ hành trình 13 tuần Quý 1 vừa qua.",
+      "scenarioB": "Nhìn lại toàn bộ hành trình tự học và tích lũy tri thức trong Quý 2."
+    }
+  ],
+  "threshold": 0.62,
+  "answerDistribution": {
+    "C": 32,
+    "B": 483,
+    "A": 5
+  },
+  "roadmapMismatch": [
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39
+  ]
+}
